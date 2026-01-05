@@ -10,9 +10,7 @@ Key observations from the confusion matrix:
 
 ----
 
-he lower accuracy with LBP (42% vs 55.5% with color histogram) is expected for this dataset. Here's why:
-
-  Why Color Histogram Works Better Here
+The lower accuracy with LBP (42% vs 55.5% with color histogram) is expected for this dataset:
 
   1. These classes are color-discriminative:
   - car_side (19/20 with LBP, 20/20 with color): Cars have distinct colors + road/sky backgrounds
@@ -32,8 +30,6 @@ he lower accuracy with LBP (42% vs 55.5% with color histogram) is expected for t
 
   These objects may share similar edge/texture patterns but have very different colors.
 
-  When LBP Works Better
-
   LBP excels at texture classification (wood vs fabric vs stone), not object recognition. For Caltech101 objects:
   - Objects have varied poses/scales → texture patterns vary
   - Background textures add noise
@@ -46,7 +42,6 @@ he lower accuracy with LBP (42% vs 55.5% with color histogram) is expected for t
   | Color histogram | Objects with distinctive colors, scene classification           |
   | LBP             | Texture recognition, material classification, face verification |
 
-  For better results, you could combine both descriptors (concatenate them) to capture both color and texture information.
 ----
 Local descriptor
 
@@ -75,7 +70,6 @@ Local descriptor
   | watch      | 14/20         | 70%      |
   | chandelier | 11/20         | 55%      |
 
-  Why local_desc works better:
 
   1. Preserves spatial information: Global histogram loses WHERE colors appear. The 5x5 grid keeps location info:
     - Airplanes: blue sky at top, plane body in center
