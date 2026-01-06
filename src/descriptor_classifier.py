@@ -1,18 +1,29 @@
+"""Image classification using descriptors and logistic regression."""
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 
 from dataset_to_descriptor import dataset_to_descriptor
-from descriptor import color_histogram, fusion_histrogram, lbp_histogram, local_desc
+from descriptor import color_histogram, fusion_histogram, lbp_histogram, local_desc
 
-image_dir = "data/caltech101_subset/caltech101_subset"
-labels_file = "data/caltech101_subset/caltech101_subset.files"
+IMAGE_DIR = "data/caltech101_subset/caltech101_subset"
+LABELS_FILE = "data/caltech101_subset/caltech101_subset.files"
 
 
-def load_labels():
-    """Load labels from the .files file and return a dict mapping filename to label."""
+def load_labels(labels_file=LABELS_FILE):
+    """Load labels from a .files annotation file.
+
+    Args:
+        labels_file: Path to the file containing image paths and labels.
+            Expected format: "path/to/image.jpg label" per line.
+
+    Returns:
+        Dictionary mapping image filenames to their class labels.
+    """
     labels = {}
+
     with open(labels_file, "r") as f:
         for line in f:
             line = line.strip()
@@ -20,18 +31,26 @@ def load_labels():
                 continue
             parts = line.split()
             if len(parts) >= 2:
-                # Format: caltech101_subset/filename.jpg label
                 filepath = parts[0]
                 label = parts[1]
-                # Extract just the filename
                 filename = filepath.split("/")[-1]
                 labels[filename] = label
+
     return labels
 
 
-def make_dataset():
-    """Create dataset with descriptors and their corresponding labels."""
-    descriptors = dataset_to_descriptor(image_dir, local_desc)
+def make_dataset(image_dir=IMAGE_DIR, descriptor_func=local_desc):
+    """Create a dataset of descriptors with corresponding labels.
+
+    Args:
+        image_dir: Path to the directory containing images.
+        descriptor_func: Function to compute image descriptors.
+
+    Returns:
+        Tuple of (X, y) where X is a numpy array of descriptors
+        and y is a numpy array of labels.
+    """
+    descriptors = dataset_to_descriptor(image_dir, descriptor_func)
     labels_map = load_labels()
 
     X = []
@@ -45,34 +64,36 @@ def make_dataset():
     return np.array(X), np.array(y)
 
 
-def train_eval():
-    """Train LogisticRegression and evaluate with accuracy and confusion matrix."""
-    X, y = make_dataset()
+def train_eval(descriptor_func=local_desc, test_size=0.2, random_state=42):
+    """Train a logistic regression classifier and evaluate its performance.
 
-    # Split into train and test sets
+    Args:
+        descriptor_func: Function to compute image descriptors.
+        test_size: Fraction of data to use for testing.
+        random_state: Random seed for reproducibility.
+
+    Returns:
+        Tuple of (classifier, accuracy, confusion_matrix).
+    """
+    X, y = make_dataset(descriptor_func=descriptor_func)
+
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X, y, test_size=test_size, random_state=random_state, stratify=y
     )
 
-    # Train LogisticRegression
-    clf = LogisticRegression(max_iter=100, random_state=42)
+    clf = LogisticRegression(max_iter=1000, random_state=random_state)
     clf.fit(X_train, y_train)
 
-    # Predict on test set
     y_pred = clf.predict(X_test)
 
-    # Calculate accuracy
     acc = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {acc:.4f}")
 
-    # Calculate confusion matrix
     cm = confusion_matrix(y_test, y_pred)
     print("\nConfusion Matrix:")
     print(cm)
 
-    # Print class labels for reference
-    classes = clf.classes_
-    print("\nClass labels:", classes)
+    print("\nClass labels:", clf.classes_)
 
     return clf, acc, cm
 
