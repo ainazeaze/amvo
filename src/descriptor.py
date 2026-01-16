@@ -43,7 +43,7 @@ def lbp_histogram(im, n_points=8, radius=1):
     Returns:
         Normalized LBP histogram as numpy array.
     """
-    gray_image = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+gray_image = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     lbp_image = local_binary_pattern(gray_image, n_points, radius)
     n_bins = int(lbp_image.max() + 1)
     hist, _ = np.histogram(lbp_image, bins=np.arange(n_bins + 1), density=True)
