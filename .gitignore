@@ -1,3 +1,5 @@
+toy-dataset/
 .venv/
 data/
 .DS_Store
+*.pyc
