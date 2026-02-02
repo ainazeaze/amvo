@@ -7,3 +7,4 @@ data/
 *.pyc
 *.keras
 visual_vocabularies/
+output/
