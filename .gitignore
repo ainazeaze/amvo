@@ -1,6 +1,9 @@
 toy-dataset/
 ucf_sports_subset5/
+caltech101_subset/
 .venv/
 data/
 .DS_Store
 *.pyc
+*.keras
+visual_vocabularies/
