@@ -1,4 +1,3 @@
-"""Image classification using descriptors and logistic regression."""
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -13,15 +12,6 @@ LABELS_FILE = "data/caltech101_subset/caltech101_subset.files"
 
 
 def load_labels(labels_file=LABELS_FILE):
-    """Load labels from a .files annotation file.
-
-    Args:
-        labels_file: Path to the file containing image paths and labels.
-            Expected format: "path/to/image.jpg label" per line.
-
-    Returns:
-        Dictionary mapping image filenames to their class labels.
-    """
     labels = {}
 
     with open(labels_file, "r") as f:
@@ -40,16 +30,6 @@ def load_labels(labels_file=LABELS_FILE):
 
 
 def make_dataset(image_dir=IMAGE_DIR, descriptor_func=local_desc):
-    """Create a dataset of descriptors with corresponding labels.
-
-    Args:
-        image_dir: Path to the directory containing images.
-        descriptor_func: Function to compute image descriptors.
-
-    Returns:
-        Tuple of (X, y) where X is a numpy array of descriptors
-        and y is a numpy array of labels.
-    """
     descriptors = dataset_to_descriptor(image_dir, descriptor_func)
     labels_map = load_labels()
 
@@ -65,16 +45,6 @@ def make_dataset(image_dir=IMAGE_DIR, descriptor_func=local_desc):
 
 
 def train_eval(descriptor_func=local_desc, test_size=0.2, random_state=42):
-    """Train a logistic regression classifier and evaluate its performance.
-
-    Args:
-        descriptor_func: Function to compute image descriptors.
-        test_size: Fraction of data to use for testing.
-        random_state: Random seed for reproducibility.
-
-    Returns:
-        Tuple of (classifier, accuracy, confusion_matrix).
-    """
     X, y = make_dataset(descriptor_func=descriptor_func)
 
     X_train, X_test, y_train, y_test = train_test_split(

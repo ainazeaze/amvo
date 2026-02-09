@@ -8,15 +8,6 @@ from sift import sift_kp_desc
 
 
 def hist_word(image, vocab_path="vocabularies_sift/vocabulary_5000.npy"):
-    """Compute the histogram of visual words for an image.
-
-    Args:
-        image_path: Path to the image file.
-        vocab_path: Path to the vocabulary file.
-
-    Returns:
-        Normalized histogram of visual words.
-    """
     vocab = np.load(vocab_path)
     vocab_size = vocab.shape[0]
 
@@ -40,16 +31,6 @@ def hist_word(image, vocab_path="vocabularies_sift/vocabulary_5000.npy"):
 
 
 def dataset_to_hist_word(folder_dir):
-    """Compute histogram of visual word for all images in a directory.
-
-    Args:
-        folder_dir: Path to the directory containing the images.
-        descriptor_func: Function that takes an image (numpy array) and returns
-            a descriptor (numpy array).
-
-    Returns:
-        Dictionary mapping image filenames to their computed descriptors.
-    """
     descriptors = {}
 
     for image_path in os.listdir(folder_dir):
