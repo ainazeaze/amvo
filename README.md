@@ -185,3 +185,34 @@ Bénéfices clés:
 
 Le compromis 73% vs 82.5% est acceptable quand on a besoin de recherche en temps réel
 sur de grandes bases de données. Pour de petits datasets où la précision prime, on évite le PCA.
+
+
+
+# TP5
+1. LBP vs LBP-TOP:
+   - LBP ne capture que l'information de texture spatiale (plan XY) à un instant t.
+   - LBP-TOP capture la dynamique spatio-temporelle via les 3 plans orthogonaux
+     (XY, XT, YT), ce qui encode le mouvement et les changements de texture.
+   - Pour la reconnaissance d'actions, LBP-TOP devrait être plus performant car
+     les actions se caractérisent par des patterns de mouvement (information temporelle).
+
+2. Comparaison avec HOG/HOF:
+   - HOG/HOF sont calculés sur des voisinages plus grands et à l'échelle naturelle
+     des points d'intérêt STIP, ce qui les rend plus discriminants.
+   - LBP avec un voisinage fixe de 3 perd l'information multi-échelle.
+   - HOF capture directement le flux optique (mouvement explicite), tandis que
+     LBP-TOP capture le mouvement implicitement via les variations de texture.
+
+3. Hyper-paramètres:
+   - Le kernel RBF est généralement le plus adapté pour les BoVW (histogrammes).
+   - Le paramètre C contrôle le compromis biais/variance : un C trop petit
+     sous-apprend, un C trop grand sur-apprend.
+   - La taille du vocabulaire influence la granularité de la représentation :
+     trop petit = perte d'information, trop grand = overfitting et sparsité.
+
+4. Voisinage adaptatif:
+   - Les points d'intérêt STIP sont détectés à des échelles variées.
+   - Un voisinage fixe de 3 pixels est souvent trop petit par rapport à l'échelle
+     naturelle des points, ce qui produit des descripteurs peu informatifs.
+   - L'approche adaptative (extraire à l'échelle du point puis redimensionner
+     vers 3x3) devrait mieux capturer l'information pertinente à chaque échelle.
