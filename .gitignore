@@ -8,3 +8,4 @@ data/
 *.keras
 visual_vocabularies/
 output/
+*/local/
